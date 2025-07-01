@@ -1,0 +1,13 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - "80:80" # HTTP
+      - "443:443" # HTTPS
+    networks:
+      - jordan-net
+
+networks:
+  jordan-net:
+    driver: bridge

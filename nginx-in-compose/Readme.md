@@ -1,51 +1,43 @@
-### nginx-standalone (NGINX as Separate Container)
+# 🐳 nginx-in-compose (Basic NGINX + Node.js Reverse Proxy)
 
-# ├── nginx/
+This project sets up a minimal **Node.js app behind an NGINX reverse proxy** using Docker Compose.  
+Perfect for local development and learning how NGINX works with backend apps.
 
-# │ ├── dev.conf
+---
 
-# │ └── prod.conf
+## 📁 Project Structure
 
-##### dev.conf
+nginx-in-compose/
+├── docker-compose.yml # Base Compose config
+├── docker-compose.dev.yml # Dev override (volumes, app-dev)
+├── nginx/
+│ └── conf.d/
+│ └── dev.conf # Basic NGINX reverse proxy config
+├── src/
+│ └── app.js # Express app (example)
 
-http {
+## 🔧 Features
+
+- ✅ Simple NGINX reverse proxy to Node.js
+- ✅ Clean separation of concerns via Docker Compose
+- ✅ Hot-reload ready for development
+- 🚫 No SSL (plain HTTP)
+
+## 📝 NGINX Config (dev.conf)
+
+```bash
 server {
-listen 80;
-location / {
-proxy_pass http://host.docker.internal:3000;
-proxy_http_version 1.1;
-proxy_set_header Upgrade $http_upgrade;
-proxy_set_header Connection 'upgrade';
-proxy_set_header Host $host;
-proxy_cache_bypass $http_upgrade;
-}
-}
-}
+  listen 80;
+  server_name localhost;
 
-###### prod.conf
-
-http {
-server {
-listen 80;
-location / {
-proxy_pass http://host.docker.internal:3001;
-proxy_http_version 1.1;
-proxy_set_header Upgrade $http_upgrade;
-proxy_set_header Connection 'upgrade';
-proxy_set_header Host $host;
-proxy_cache_bypass $http_upgrade;
+  location / {
+    proxy_pass http://app-dev:8080;
+    add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+  }
 }
-}
-}
+```
 
-# Run commands:
-
-docker run -d --name nginx-dev \
- -p 8080:80 \
- -v "$(pwd)/nginx/dev.conf":/etc/nginx/nginx.conf:ro \
- nginx
-
-docker run -d --name nginx-prod \
- -p 8081:80 \
- -v "$(pwd)/nginx/prod.conf":/etc/nginx/nginx.conf:ro \
- nginx
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml -p dev up -d --build
+```
