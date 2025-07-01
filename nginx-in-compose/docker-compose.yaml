@@ -1,25 +1,12 @@
 services:
-  dev:
-    container_name: jordan-dev
-    build:
-      context: .
-      dockerfile: Dockerfile
+  nginx:
+    container_name: nginx
+    image: nginx
     ports:
-      - 3000:8080
-    env_file: .env.local
-    volumes:
-      - .:/app
-      - /app/node_modules
-    restart: unless-stopped
-    command: npm run start:dev
+      - "80:80"
+    networks:
+      - jordan-net
 
-  prod:
-    container_name: jordan-prod
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 3001:8080
-    env_file: .env.prod
-    restart: unless-stopped
-    command: npm run start:prod
+networks:
+  jordan-net:
+    driver: bridge

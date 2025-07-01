@@ -1,0 +1,20 @@
+services:
+  nginx:
+    volumes:
+      - ./nginx/conf.d/dev.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app-dev
+  app-dev:
+    container_name: app-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 8080
+    env_file: .env.local
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:dev
+    networks:
+      - jordan-net
