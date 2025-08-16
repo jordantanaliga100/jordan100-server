@@ -1,0 +1,23 @@
+:root {
+  height: 100avh;
+  width: 100avw;
+  background: #000;
+  color: purple;
+}
+
+html,
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 10rem auto;
+
+  justify-content: center;
+  align-items: center;
+
+  background-color: #000;
+  color: purple;
+}
+
+pre {
+  color: green;
+}
