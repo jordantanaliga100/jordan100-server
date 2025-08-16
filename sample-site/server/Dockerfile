@@ -9,10 +9,10 @@ COPY pnpm-lock.yaml* ./
 
 
 # Install application dependencies
-RUN npm install -g pnpm
+RUN npm install -g pnpmcode
 RUN pnpm install
 
-# Copy the rest of your application code
+# Copy the rest of your application 
 COPY . .
 
 # Expose the port your Express app listens on
