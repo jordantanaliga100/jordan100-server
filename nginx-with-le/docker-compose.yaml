@@ -30,8 +30,19 @@ services:
     volumes:
       - ./images:/app/images:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/certbot/conf:/etc/letsencrypt:ro
+      - ./nginx/certbot/www:/etc/letsencrypt/webroot:ro
+
     depends_on:
       - app1
       - app2
       - app3
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/etc/letsencrypt/webroot
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/etc/letsencrypt/webroot --email jordantanaliga100@gmail.com --agree-tos --no-eff-email -d jordan100.duckdns.org
