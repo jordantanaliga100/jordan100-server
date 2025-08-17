@@ -1,13 +1,9 @@
 FROM node:22
 WORKDIR /app
-
-COPY server.js .
-COPY index.html .
-COPY images ./images
+RUN npm install -g pnpm
 COPY package.json .
-
-RUN npm install
-
+RUN pnpm install
+COPY . .
 EXPOSE 3000
+CMD ["pnpm", "start"]
 
-CMD ["node", "server.js"]
