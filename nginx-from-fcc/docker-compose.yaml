@@ -1,0 +1,22 @@
+services:
+  nginx:
+    container_name: nginxCore
+    image: nginx:latest
+    ports:
+      - "${HOST_PORT}:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - app
+
+  app:
+    container_name: nodeApp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT}:${APP_PORT}" # bypass nginx...
+    volumes:
+      - ./:/app
+      - /app/node_modules
